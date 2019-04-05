@@ -74,7 +74,7 @@ public class AprendiendoJava14 implements Runnable {
              // Estos son los comandos para dibujar cosas
             Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();           // Crea un nuevo grafico 2D
             g.clearRect(0, 0, 512, 512);
-           g.drawImage(imagenmanzana, posx,posy, null);
+            g.drawImage(imagenmanzana, posx,posy, null);
             g.dispose();                                                            // Vacia la memoria
         bufferStrategy.show();                                                  // Muestra el buffer                                                        // Llamada el metodo de render         
             try {
