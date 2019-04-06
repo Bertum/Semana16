@@ -163,6 +163,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
             INTERACTIVE_CTX.clearRect(0, 0, 512, 512);
             INTERACTIVE_CTX.drawImage(player.img, player.x, player.y, null);
             INTERACTIVE_CTX.dispose();
+            player.movementControl();
             gameBufferStrategy.show();
             collisionBufferStrategy.show();
             interactiveBufferStrategy.show();
@@ -185,6 +186,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyReleased(KeyEvent ke) {
+        player.keyReleased(ke);
     }
 
     @Override

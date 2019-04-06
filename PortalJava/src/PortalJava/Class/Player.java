@@ -7,6 +7,8 @@ package PortalJava.Class;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class Player {
         this.acceleration = 0;
         this.rotation = 0;
         this.angle = 0;
-        this.speed = 5;
+        this.speed = 3;
         this.inButton = false;
         this.portal0 = null;
         this.portal1 = null;
@@ -74,7 +76,7 @@ public class Player {
     }
 
     public void draw(Graphics2D canvas) {
-        //drawImageRot(INTERACTIVE_CTX, this.img, this.x - (this.img.width / 4), this.y - (this.img.width / 4), this.img.width, this.img.height, this.angle);
+        drawImageRot(canvas, this.img, this.x - (this.img.getWidth() / 4), this.y - (this.img.getWidth() / 4), this.img.getWidth(), this.img.getHeight(), this.angle);
 
         //Draw portals
         if (this.portal0 != null) {
@@ -86,12 +88,30 @@ public class Player {
     }
     
     public void keyReleased(KeyEvent e) {
+        //W
+        if(e.getKeyCode() == 87)    this.acceleration = 0;
+        //S
+        if(e.getKeyCode() == 83)    this.acceleration = 0;
+        //A
+        if(e.getKeyCode() == 65)    this.rotation = 0;
+        //D
+        if(e.getKeyCode() == 68)    this.rotation = 0;
     }
 
     public void keyPressed(KeyEvent e) {
-            System.out.println(e.getKeyCode());
-            if(e.getKeyCode() == 68)    this.x++;
-            if(e.getKeyCode() == 87)    this.y--;
+            //System.out.println(e.getKeyCode());
+        //W
+        if(e.getKeyCode() == 87)    this.acceleration = 1;
+        //S
+        if(e.getKeyCode() == 83)    this.acceleration = -1;
+        //A
+        if(e.getKeyCode() == 65)    this.rotation = (float) -0.05;
+        //D
+        if(e.getKeyCode() == 68)    this.rotation = (float) 0.05;
+        //Q
+        //if(e.getKeyCode() == 81)    this.shootPortal(0);
+        //E
+        //if(e.getKeyCode() == 69)    this.shootPortal(1);
     }
 
     public boolean collision() {
@@ -297,4 +317,16 @@ public class Player {
             this.y = this.portal0.y;
         }
     }
+    
+    public void drawImageRot(Graphics2D context, BufferedImage img, int x, int y, int width, int height, float rad) {
+        // Rotation information
+        double locationX = img.getWidth() / 2;
+        double locationY = img.getHeight() / 2;
+        AffineTransform tx = AffineTransform.getRotateInstance(rad, locationX, locationY);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+        // Drawing the rotated image at the required drawing locations
+        context.drawImage(op.filter(img, null), x, y, null);
+    }
+    
 }
