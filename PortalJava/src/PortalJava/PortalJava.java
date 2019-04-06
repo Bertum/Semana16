@@ -59,8 +59,9 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
 
     public PortalJava() {
         loadImages();
-
-        player = new Player(posx, posy);
+        door = new Door(704, 257, closeDoorImageV, openDoorImageV);
+        switchButton = new Switch(170, 450, switchOffImage, switchOnImage, door);
+        player = new Player(posx, posy, switchButton);
 
         frame = new JFrame("Lazzy Portals");
 
@@ -164,7 +165,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
             //INTERACTIVE_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             MAP_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             drawBackgrounds();
-            player.movementControl();
+            player.movementControl(MAP_CTX);
             //player.draw(INTERACTIVE_CTX);
             player.draw(MAP_CTX);
             gameBufferStrategy.show();

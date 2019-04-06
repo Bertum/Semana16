@@ -157,8 +157,7 @@ $(document).ready(function() {
                 && y1 + h1 > y2;
     }
 
-    //TODO: Test if work
-    public void drawImageRot(Graphics2D context, BufferedImage img, int x, int y, int width, int height, int rad) {
+    public void drawImageRot(Graphics2D context, BufferedImage img, int x, int y, int width, int height, float rad) {
         // Rotation information
         double locationX = img.getWidth() / 2;
         double locationY = img.getHeight() / 2;

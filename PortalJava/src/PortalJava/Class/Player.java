@@ -5,12 +5,10 @@
  */
 package PortalJava.Class;
 
+import PortalJava.Functions;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
@@ -33,8 +31,10 @@ public class Player {
     public Portal portal0;
     public Portal portal1;
     public BufferedImage img;
+    public Switch button;
+    private Functions functions;
 
-    public Player(int x, int y) {
+    public Player(int x, int y, Switch button) {
         this.x = x;
         this.y = y;
         this.acceleration = 0;
@@ -44,6 +44,8 @@ public class Player {
         this.inButton = false;
         this.portal0 = null;
         this.portal1 = null;
+        this.button = button;
+        this.functions = new Functions();
         try {
             //TODO: relative path
             URL resource = Player.class.getResource("/PortalJava/images/players/player1.png");
@@ -59,14 +61,14 @@ public class Player {
         this.angle += value;
     }
 
-    public void movementControl() {
+    public void movementControl(Graphics2D canvas) {
         boolean collision = this.collision();
-        //this.checkButtonCollision();
+        this.checkButtonCollision();
         if (collision == false) {
             this.movement();
         }
         this.angle += this.rotation;
-        this.scope();
+        this.scope(canvas);
         this.playerIntoPortal();
     }
 
@@ -76,7 +78,7 @@ public class Player {
     }
 
     public void draw(Graphics2D canvas) {
-        drawImageRot(canvas, this.img, this.x - (this.img.getWidth() / 4), this.y - (this.img.getWidth() / 4), this.img.getWidth(), this.img.getHeight(), this.angle);
+        functions.drawImageRot(canvas, this.img, this.x - (this.img.getWidth() / 4), this.y - (this.img.getWidth() / 4), this.img.getWidth(), this.img.getHeight(), this.angle);
 
         //Draw portals
         if (this.portal0 != null) {
@@ -86,28 +88,44 @@ public class Player {
             this.portal1.draw(canvas);
         }
     }
-    
+
     public void keyReleased(KeyEvent e) {
         //W
-        if(e.getKeyCode() == 87)    this.acceleration = 0;
+        if (e.getKeyCode() == 87) {
+            this.acceleration = 0;
+        }
         //S
-        if(e.getKeyCode() == 83)    this.acceleration = 0;
+        if (e.getKeyCode() == 83) {
+            this.acceleration = 0;
+        }
         //A
-        if(e.getKeyCode() == 65)    this.rotation = 0;
+        if (e.getKeyCode() == 65) {
+            this.rotation = 0;
+        }
         //D
-        if(e.getKeyCode() == 68)    this.rotation = 0;
+        if (e.getKeyCode() == 68) {
+            this.rotation = 0;
+        }
     }
 
     public void keyPressed(KeyEvent e) {
-            //System.out.println(e.getKeyCode());
+        //System.out.println(e.getKeyCode());
         //W
-        if(e.getKeyCode() == 87)    this.acceleration = 1;
+        if (e.getKeyCode() == 87) {
+            this.acceleration = 1;
+        }
         //S
-        if(e.getKeyCode() == 83)    this.acceleration = -1;
+        if (e.getKeyCode() == 83) {
+            this.acceleration = -1;
+        }
         //A
-        if(e.getKeyCode() == 65)    this.rotation = (float) -0.05;
+        if (e.getKeyCode() == 65) {
+            this.rotation = (float) -0.05;
+        }
         //D
-        if(e.getKeyCode() == 68)    this.rotation = (float) 0.05;
+        if (e.getKeyCode() == 68) {
+            this.rotation = (float) 0.05;
+        }
         //Q
         //if(e.getKeyCode() == 81)    this.shootPortal(0);
         //E
@@ -168,61 +186,50 @@ public class Player {
         System.out.println("mueres");
     }
 
-//    public void checkButtonCollision() {
-//        if (squareCollision(this.x + 16, this.y + 16, 1, 1,
-//                switchButton.x, switchButton.y, switchButton.src.width, switchButton.src.height)) {
-//            if (!this.inButton) {
-//                switchButton.trigger();
-//                this.inButton = true;
-//            }
-//        } else {
-//            this.inButton = false;
-//        }
-//    }
-//    this.checkButtonCollision  = function()
-//
-//    {
-//        if (squareCollision(this.x + 16, this.y + 16, 1, 1,
-//                switchButton.x, switchButton.y, switchButton.src.width, switchButton.src.height)) {
-//            if (!this.inButton) {
-//                switchButton.trigger();
-//                this.inButton = true;
-//            }
-//        } else {
-//            this.inButton = false;
-//        }
-//    }
-    public void scope() {
-//        INTERACTIVE_CTX.fillStyle = "red";
-//        for (let index = 3; index < 1000; index++) {
-//            INTERACTIVE_CTX.fillRect(
-//                    this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    1,
-//                    1)
-//            var dataParedes = COLLISION_CTX.getImageData(
-//                    this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    1,
-//                    1).data
-//
-//            if (checkPixel(dataParedes, 255, 0, 0) || checkPixel(dataParedes, 0, 0, 255)) {
-//                var blue;
-//                if (checkPixel(dataParedes, 255, 0, 0)) {
-//                    blue = false;
-//                } else {
-//                    blue = true;
-//                }
-//                this.lastPositionPortal = {
-//                    "x": this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    "y": this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    "blue": blue
-//                }
-//                break;
-//                //index = 1000;
-//            }
-//
-//        }
+    public void checkButtonCollision() {
+        if (functions.squareCollision(this.x + 16, this.y + 16, 1, 1,
+                this.button.x, this.button.y, this.button.currentSprite.getWidth(), this.button.currentSprite.getHeight())) {
+            if (!this.inButton) {
+                this.button.trigger();
+                this.inButton = true;
+            }
+        } else {
+            this.inButton = false;
+        }
+    }
+
+    public void scope(Graphics2D canvas) {
+        //INTERACTIVE_CTX.fillStyle = "red";
+        /*for (int index = 3; index < 1000; index++) {
+            canvas.fillRect(
+                    this.x + (this.img.getWidth() / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
+                    this.y + (this.img.getWidth()) / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index
+            ,
+                    1,
+                    1)
+            var dataParedes = COLLISION_CTX.getImageData(
+                    this.x + (this.img.getWidth()) / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
+                    this.y + (this.img.getWidth() / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
+                    1,
+                    1).data
+
+            if (checkPixel(dataParedes, 255, 0, 0) || checkPixel(dataParedes, 0, 0, 255)) {
+                boolean blue;
+                if (checkPixel(dataParedes, 255, 0, 0)) {
+                    blue = false;
+                } else {
+                    blue = true;
+                }
+                this.lastPositionPortal = {
+                    "x": this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
+                    "y": this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
+                    "blue": blue
+                }
+                break;
+                //index = 1000;
+            }
+
+        }*/
     }
 
 //    this.scope  = function()
@@ -317,16 +324,4 @@ public class Player {
             this.y = this.portal0.y;
         }
     }
-    
-    public void drawImageRot(Graphics2D context, BufferedImage img, int x, int y, int width, int height, float rad) {
-        // Rotation information
-        double locationX = img.getWidth() / 2;
-        double locationY = img.getHeight() / 2;
-        AffineTransform tx = AffineTransform.getRotateInstance(rad, locationX, locationY);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-
-        // Drawing the rotated image at the required drawing locations
-        context.drawImage(op.filter(img, null), x, y, null);
-    }
-    
 }
