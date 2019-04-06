@@ -125,11 +125,11 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
         while (true) {
-            posx += (Math.random() - 0.4) * 5;
-            posy += (Math.random() - 0.4) * 5;
+            player.movementControl();
             Graphics2D g = (Graphics2D) gameBufferStrategy.getDrawGraphics();
             g.clearRect(0, 0, 512, 512);
-            g.drawImage(player.img, player.x, player.y, null);
+            player.draw(g);
+            //g.drawImage(player.img, player.x, player.y, null);
             g.dispose();
             gameBufferStrategy.show();
             try {
@@ -146,6 +146,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyReleased(KeyEvent ke) {
+        player.keyReleased(ke);
     }
 
     @Override
