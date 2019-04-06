@@ -47,7 +47,8 @@ public class PortalJava implements Runnable {
     JFrame frame;
     Canvas canvas;
     Canvas interactionCanvas;
-    BufferStrategy bufferStrategy;
+    BufferStrategy gameBufferStrategy;
+    BufferStrategy interactionBufferStrategy;
     private BufferedImage imagenmanzana;
     int posx = 256;
     int posy = 256;
@@ -84,10 +85,11 @@ public class PortalJava implements Runnable {
         panel.add(interactionCanvas);
 
         canvas.createBufferStrategy(2);
-        bufferStrategy = canvas.getBufferStrategy();
+        gameBufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
 
         interactionCanvas.createBufferStrategy(2);
+        interactionBufferStrategy = interactionCanvas.getBufferStrategy();
         interactionCanvas.requestFocus();
 
     }
@@ -112,27 +114,23 @@ public class PortalJava implements Runnable {
         return image;
     }
 
-    // RALMENTE RECORDAMOS QUE EN JAVA EL QUE REALMENTE EJECUTA LAS COSAS ES EL MAIN
     public static void main(String[] args) {
-        PortalJava ex = new PortalJava();                                 // Instancia del metodo principal
-        // EN JAVA, SI QUIERES QUE ALGO SE REPITA CONTINUAMENTE, ES MUY RECOMENDABLE QUE USES LA LIBRERÍA THREAD
-        new Thread(ex).start();                                                 // Arranque de una uneva tarea
+        PortalJava ex = new PortalJava();
+        new Thread(ex).start();
     }
 
     @Override
     public void run() {
-        while (true) {                                                         // Mientras sea cierto que se esta ejecutando
-            // Estos son los comandos para actualizar cosas del juego
+        while (true) {
             posx += (Math.random() - 0.4) * 5;
             posy += (Math.random() - 0.4) * 5;
-            // Estos son los comandos para dibujar cosas
-            Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();           // Crea un nuevo grafico 2D
+            Graphics2D g = (Graphics2D) gameBufferStrategy.getDrawGraphics();
             g.clearRect(0, 0, 512, 512);
             g.drawImage(imagenmanzana, posx, posy, null);
-            g.dispose();                                                            // Vacia la memoria
-            bufferStrategy.show();                                                  // Muestra el buffer                                                        // Llamada el metodo de render
+            g.dispose();
+            gameBufferStrategy.show();
             try {
-                Thread.sleep(3);   // Para la ejecicion (como el SetTimeout)
+                Thread.sleep(3);
             } catch (InterruptedException ex) {
                 Logger.getLogger(PortalJava.class.getName()).log(Level.SEVERE, null, ex);
             }
