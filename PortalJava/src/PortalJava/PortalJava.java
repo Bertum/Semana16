@@ -90,15 +90,17 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         gameCanvas.setVisible(true);
 
         panel.add(gameCanvas);
+
+        gameCanvas.createBufferStrategy(2);
+        gameBufferStrategy = gameCanvas.getBufferStrategy();
+        gameCanvas.requestFocus();
+
         //collision Canvas
         collisionCanvas = new Canvas();
         collisionCanvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         collisionCanvas.setIgnoreRepaint(true);
         collisionCanvas.setVisible(false);
         panel.add(collisionCanvas);
-        gameCanvas.createBufferStrategy(2);
-        gameBufferStrategy = gameCanvas.getBufferStrategy();
-        gameCanvas.requestFocus();
 
         collisionCanvas.createBufferStrategy(2);
         collisionBufferStrategy = collisionCanvas.getBufferStrategy();
@@ -108,13 +110,14 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         interactiveCanvas = new Canvas();
         interactiveCanvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         interactiveCanvas.setIgnoreRepaint(true);
-        interactiveCanvas.setVisible(false);
+        interactiveCanvas.setVisible(true);
         panel.add(interactiveCanvas);
         interactiveCanvas.createBufferStrategy(2);
         interactiveBufferStrategy = interactiveCanvas.getBufferStrategy();
         interactiveCanvas.requestFocus();
 
         gameCanvas.addKeyListener(this);
+        interactiveCanvas.addKeyListener(this);
         MAP_CTX = (Graphics2D) gameBufferStrategy.getDrawGraphics();
         COLLISION_CTX = (Graphics2D) collisionBufferStrategy.getDrawGraphics();
         INTERACTIVE_CTX = (Graphics2D) interactiveBufferStrategy.getDrawGraphics();
@@ -157,16 +160,17 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
         while (true) {
-            posx += (Math.random() - 0.4) * 5;
-            posy += (Math.random() - 0.4) * 5;
-
-            INTERACTIVE_CTX.clearRect(0, 0, 512, 512);
-            INTERACTIVE_CTX.drawImage(player.img, player.x, player.y, null);
-            INTERACTIVE_CTX.dispose();
+            //TODO: change to use different
+            //INTERACTIVE_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            MAP_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            drawBackgrounds();
             player.movementControl();
+            //player.draw(INTERACTIVE_CTX);
+            player.draw(MAP_CTX);
             gameBufferStrategy.show();
             collisionBufferStrategy.show();
             interactiveBufferStrategy.show();
+            INTERACTIVE_CTX.dispose();
             try {
                 Thread.sleep(3);
             } catch (InterruptedException ex) {
