@@ -7,6 +7,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -27,8 +29,8 @@ public class PortalJava implements Runnable {
     public PortalJava() {
 
         try {
-
-            imagenmanzana = ImageIO.read(new File("C://imagenes//manzana.png"));
+            URL resource = PortalJava.class.getResource("/PortalJava/images/players/player1.png");
+            imagenmanzana = ImageIO.read(resource);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
