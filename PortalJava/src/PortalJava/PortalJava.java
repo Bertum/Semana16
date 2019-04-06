@@ -6,6 +6,8 @@ import PortalJava.Class.Switch;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,7 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class PortalJava implements Runnable {
+public class PortalJava extends JPanel implements KeyListener, Runnable {
     //Canvas dimensions
 
     int CANVAS_WIDTH = 768;
@@ -56,7 +58,7 @@ public class PortalJava implements Runnable {
     public PortalJava() {
         loadImages();
 
-        player = new Player(600, 400);
+        player = new Player(posx, posy);
 
         frame = new JFrame("Lazzy Portals");
 
@@ -91,7 +93,8 @@ public class PortalJava implements Runnable {
         interactionCanvas.createBufferStrategy(2);
         interactionBufferStrategy = interactionCanvas.getBufferStrategy();
         interactionCanvas.requestFocus();
-
+        
+        canvas.addKeyListener(this);
     }
 
     private void loadImages() {
@@ -126,7 +129,7 @@ public class PortalJava implements Runnable {
             posy += (Math.random() - 0.4) * 5;
             Graphics2D g = (Graphics2D) gameBufferStrategy.getDrawGraphics();
             g.clearRect(0, 0, 512, 512);
-            g.drawImage(imagenmanzana, posx, posy, null);
+            g.drawImage(player.img, player.x, player.y, null);
             g.dispose();
             gameBufferStrategy.show();
             try {
@@ -135,5 +138,18 @@ public class PortalJava implements Runnable {
                 Logger.getLogger(PortalJava.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        player.keyPressed(ke);
     }
 }

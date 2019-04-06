@@ -6,9 +6,11 @@
 package PortalJava.Class;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import javax.imageio.ImageIO;
 
 /**
@@ -18,8 +20,8 @@ import javax.imageio.ImageIO;
 public class Player {
 
     public int id;
-    public float x;
-    public float y;
+    public int x;
+    public int y;
     public float acceleration;
     public float rotation;
     public float angle;
@@ -28,9 +30,9 @@ public class Player {
     public PortalPosition lastPositionPortal;
     public Portal portal0;
     public Portal portal1;
-    private BufferedImage img;
+    public BufferedImage img;
 
-    public Player(float x, float y) {
+    public Player(int x, int y) {
         this.x = x;
         this.y = y;
         this.acceleration = 0;
@@ -42,7 +44,8 @@ public class Player {
         this.portal1 = null;
         try {
             //TODO: relative path
-            this.img = ImageIO.read(new File("C://imagenes//players/player1.png"));
+            URL resource = Player.class.getResource("/PortalJava/images/players/player1.png");
+            this.img = ImageIO.read(resource);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -80,6 +83,15 @@ public class Player {
         if (this.portal1 != null) {
             this.portal1.draw(canvas);
         }
+    }
+    
+    public void keyReleased(KeyEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+            System.out.println(e.getKeyCode());
+            if(e.getKeyCode() == 68)    this.x++;
+            if(e.getKeyCode() == 87)    this.y--;
     }
 
     public boolean collision() {
