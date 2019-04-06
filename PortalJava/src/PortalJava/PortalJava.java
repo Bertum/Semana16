@@ -47,13 +47,15 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     BufferedImage imgMapCollisions = null;
 
     JFrame frame;
-    Canvas canvas;
-    Canvas interactionCanvas;
+    Canvas gameCanvas;
+    Canvas collisionCanvas;
+    Canvas interactiveCanvas;
     BufferStrategy gameBufferStrategy;
-    BufferStrategy interactionBufferStrategy;
-    private BufferedImage imagenmanzana;
-    int posx = 256;
-    int posy = 256;
+    BufferStrategy collisionBufferStrategy;
+    BufferStrategy interactiveBufferStrategy;
+
+    int posx = 600;
+    int posy = 400;
 
     public PortalJava() {
         loadImages();
@@ -62,8 +64,13 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
 
         frame = new JFrame("Lazzy Portals");
 
+        configureGame();
+        drawBackgrounds();
+    }
+
+    private void configureGame() {
         JPanel panel = (JPanel) frame.getContentPane();
-        panel.setPreferredSize(new Dimension(512, 512));
+        panel.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
         panel.setLayout(null);
         panel.setFocusable(true);
 
@@ -71,30 +78,55 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         frame.pack();
         frame.setResizable(true);
         frame.setVisible(true);
+        //TODO: Make it work to refactor code
+        /*gameCanvas = configureCanvas(panel);
+        collisionCanvas = configureCanvas(panel);
+        interactiveCanvas = configureCanvas(panel);*/
 
         //Game Canvas
-        canvas = new Canvas();
-        canvas.setBounds(0, 0, 512, 512);
-        canvas.setIgnoreRepaint(true);
-        canvas.setVisible(true);
-        panel.add(canvas);
+        gameCanvas = new Canvas();
+        gameCanvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        gameCanvas.setIgnoreRepaint(true);
+        gameCanvas.setVisible(true);
+
+        panel.add(gameCanvas);
+        //collision Canvas
+        collisionCanvas = new Canvas();
+        collisionCanvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        collisionCanvas.setIgnoreRepaint(true);
+        collisionCanvas.setVisible(false);
+        panel.add(collisionCanvas);
+        gameCanvas.createBufferStrategy(2);
+        gameBufferStrategy = gameCanvas.getBufferStrategy();
+        gameCanvas.requestFocus();
+
+        collisionCanvas.createBufferStrategy(2);
+        collisionBufferStrategy = collisionCanvas.getBufferStrategy();
+        collisionCanvas.requestFocus();
 
         //Interaction Canvas
-        interactionCanvas = new Canvas();
-        interactionCanvas.setBounds(0, 0, 512, 512);
-        interactionCanvas.setIgnoreRepaint(true);
-        interactionCanvas.setVisible(false);
-        panel.add(interactionCanvas);
+        interactiveCanvas = new Canvas();
+        interactiveCanvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        interactiveCanvas.setIgnoreRepaint(true);
+        interactiveCanvas.setVisible(false);
+        panel.add(interactiveCanvas);
+        interactiveCanvas.createBufferStrategy(2);
+        interactiveBufferStrategy = interactiveCanvas.getBufferStrategy();
+        interactiveCanvas.requestFocus();
 
-        canvas.createBufferStrategy(2);
-        gameBufferStrategy = canvas.getBufferStrategy();
-        canvas.requestFocus();
+        gameCanvas.addKeyListener(this);
+        MAP_CTX = (Graphics2D) gameBufferStrategy.getDrawGraphics();
+        COLLISION_CTX = (Graphics2D) collisionBufferStrategy.getDrawGraphics();
+        INTERACTIVE_CTX = (Graphics2D) interactiveBufferStrategy.getDrawGraphics();
+    }
 
-        interactionCanvas.createBufferStrategy(2);
-        interactionBufferStrategy = interactionCanvas.getBufferStrategy();
-        interactionCanvas.requestFocus();
-        
-        canvas.addKeyListener(this);
+    private Canvas configureCanvas(JPanel panel) {
+        Canvas canvas = new Canvas();
+        canvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        canvas.setIgnoreRepaint(true);
+        canvas.setVisible(false);
+        panel.add(canvas);
+        return canvas;
     }
 
     private void loadImages() {
@@ -127,17 +159,24 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         while (true) {
             posx += (Math.random() - 0.4) * 5;
             posy += (Math.random() - 0.4) * 5;
-            Graphics2D g = (Graphics2D) gameBufferStrategy.getDrawGraphics();
-            g.clearRect(0, 0, 512, 512);
-            g.drawImage(player.img, player.x, player.y, null);
-            g.dispose();
+
+            INTERACTIVE_CTX.clearRect(0, 0, 512, 512);
+            INTERACTIVE_CTX.drawImage(player.img, player.x, player.y, null);
+            INTERACTIVE_CTX.dispose();
             gameBufferStrategy.show();
+            collisionBufferStrategy.show();
+            interactiveBufferStrategy.show();
             try {
                 Thread.sleep(3);
             } catch (InterruptedException ex) {
                 Logger.getLogger(PortalJava.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    private void drawBackgrounds() {
+        MAP_CTX.drawImage(imgMap, 0, 0, null);
+        COLLISION_CTX.drawImage(imgMapCollisions, 0, 0, null);
     }
 
     @Override
