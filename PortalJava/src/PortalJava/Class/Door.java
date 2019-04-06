@@ -28,7 +28,8 @@ public class Door extends Trigger {
             //TODO: Fix
             //collisionCtx.fillStyle = "red"
         }
-        collisionCtx.fillRect(this.x, this.y, 64, 64);
-        this.draw(interactiveCtx);
+        //collisionCtx.fillRect(this.x, this.y, 64, 64);
+        //this.draw(interactiveCtx);
+        collisionCtx.drawImage(this.currentSprite, this.x, this.y, null);
     }
 }
