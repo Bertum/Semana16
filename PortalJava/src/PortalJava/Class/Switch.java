@@ -5,7 +5,6 @@
  */
 package PortalJava.Class;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -21,14 +20,14 @@ public class Switch extends Trigger {
         this.target = target;
     }
 
-    public void trigger(Graphics2D interactiveCtx) {
+    @Override
+    public void trigger() {
         this.triggered = !this.triggered;
         if (this.triggered) {
             this.currentSprite = this.spriteOn;
         } else {
             this.currentSprite = this.spriteOff;
         }
-        this.draw(interactiveCtx);
         this.target.trigger();
     }
 }

@@ -18,6 +18,16 @@ public class Door extends Trigger {
         super(x, y, spriteOff, spriteOn);
     }
 
+    @Override
+    public void trigger() {
+        this.triggered = !this.triggered;
+        if (this.triggered) {
+            this.currentSprite = this.spriteOn;
+        } else {
+            this.currentSprite = this.spriteOff;
+        }
+    }
+
     public void draw(Graphics2D collisionCtx, Graphics2D interactiveCtx) {
         if (this.triggered) {
             this.currentSprite = this.spriteOn;
