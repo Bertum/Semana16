@@ -7,7 +7,7 @@ package PortalJava.Class;
 
 /**
  *
- * @author Bertum
+ * @author Miguel Agudo, Alberto Delgado, Óscar Sánchez, Ferran Ases
  */
 public class PortalPosition {
 
@@ -24,7 +24,4 @@ public class PortalPosition {
         this.y = y;
         this.isBlue = blue;
     }
-    /*"x": this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-                    "y": this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-                    "blue": blue*/
 }

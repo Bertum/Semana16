@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ *
+ * @author Miguel Agudo, Alberto Delgado, Óscar Sánchez, Ferran Ases
+ */
 public class PortalJava extends JPanel implements KeyListener, Runnable {
     //Canvas dimensions
 
@@ -78,10 +82,6 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         frame.pack();
         frame.setResizable(true);
         frame.setVisible(true);
-        //TODO: Make it work to refactor code
-        /*gameCanvas = configureCanvas(panel);
-        collisionCanvas = configureCanvas(panel);
-        interactiveCanvas = configureCanvas(panel);*/
 
         //Game Canvas
         gameCanvas = new Canvas();
@@ -123,15 +123,6 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
         INTERACTIVE_CTX = (Graphics2D) interactiveBufferStrategy.getDrawGraphics();
     }
 
-    private Canvas configureCanvas(JPanel panel) {
-        Canvas canvas = new Canvas();
-        canvas.setBounds(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        canvas.setIgnoreRepaint(true);
-        canvas.setVisible(false);
-        panel.add(canvas);
-        return canvas;
-    }
-
     private void loadImages() {
         closeDoorImageV = functions.getImage("closedDoorV.png");
         openDoorImageV = functions.getImage("openDoorV.png");
@@ -149,8 +140,6 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
         while (true) {
-            //TODO: change to use different
-            //INTERACTIVE_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             MAP_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             drawBackgrounds();
             player.movementControl(MAP_CTX, imgMapCollisions);

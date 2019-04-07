@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author Bertum
+ * @author Miguel Agudo, Alberto Delgado, Óscar Sánchez, Ferran Ases
  */
 public class Door extends Trigger {
 
@@ -31,15 +31,9 @@ public class Door extends Trigger {
     public void draw(Graphics2D collisionCtx, Graphics2D interactiveCtx) {
         if (this.triggered) {
             this.currentSprite = this.spriteOn;
-            //TODO: Fix
-            //collisionCtx.fillStyle = "white"
         } else {
             this.currentSprite = this.spriteOff;
-            //TODO: Fix
-            //collisionCtx.fillStyle = "red"
         }
-        //collisionCtx.fillRect(this.x, this.y, 64, 64);
-        //this.draw(interactiveCtx);
         collisionCtx.drawImage(this.currentSprite, this.x, this.y, null);
     }
 }

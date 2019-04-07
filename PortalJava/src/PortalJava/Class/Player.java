@@ -6,6 +6,7 @@
 package PortalJava.Class;
 
 import PortalJava.Functions;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -15,7 +16,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Bertum
+ * @author Miguel Agudo, Alberto Delgado, Óscar Sánchez, Ferran Ases
  */
 public class Player {
 
@@ -46,7 +47,7 @@ public class Player {
         this.portal1 = null;
         this.button = button;
         this.functions = new Functions();
-        this.lastPositionPortal = new PortalPosition(0, 0, true);
+        //this.lastPositionPortal = new PortalPosition(0, 0, true);
         try {
             URL resource = Player.class.getResource("/PortalJava/images/players/player1.png");
             this.img = ImageIO.read(resource);
@@ -169,20 +170,27 @@ public class Player {
     }
 
     public void scope(Graphics2D canvas, BufferedImage image) {
-        int calculatedX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed;
-        int calculatedY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed;
-        canvas.fillRect(
-                calculatedX,
-                calculatedY,
-                1,
-                1);
-
-        if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 255) || functions.checkPixel(image, calculatedX, calculatedY, 0, 0, 255, 255)) {
-            boolean blue = true;
-            if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0)) {
-                blue = false;
+        try {
+            for (int i = 0; i < 768; i++) {
+                double calculatedX = this.x + (this.img.getWidth() / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * i;
+                double calculatedY = this.y + (this.img.getWidth() / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * i;
+                canvas.setColor(Color.red);
+                canvas.fillRect(
+                        (int) calculatedX,
+                        (int) calculatedY,
+                        1,
+                        1);
+                if (functions.checkPixel(image, (int) calculatedX, (int) calculatedY, 255, 0, 0, 255) || functions.checkPixel(image, (int) calculatedX, (int) calculatedY, 0, 0, 255, 255)) {
+                    boolean blue = true;
+                    if (functions.checkPixel(image, (int) calculatedX, (int) calculatedY, 255, 0, 0, 255)) {
+                        blue = false;
+                    }
+                    this.lastPositionPortal = new PortalPosition((int) calculatedX, (int) calculatedY, blue);
+                    break;
+                }
             }
-            this.lastPositionPortal = new PortalPosition(calculatedX, calculatedY, blue);
+        } catch (Exception ex) {
+            System.out.println("Se ha roto, pero no nos importa");
         }
     }
 

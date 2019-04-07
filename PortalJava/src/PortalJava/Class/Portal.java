@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author Bertum
+ * @author Miguel Agudo, Alberto Delgado, Óscar Sánchez, Ferran Ases
  */
 public class Portal {
 
