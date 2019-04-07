@@ -25,7 +25,7 @@ public class Player {
     public float acceleration;
     public float rotation;
     public float angle;
-    public float speed = 5;
+    public int speed = 5;
     public boolean inButton;
     public PortalPosition lastPositionPortal;
     public Portal portal0;
@@ -61,14 +61,14 @@ public class Player {
         this.angle += value;
     }
 
-    public void movementControl(Graphics2D canvas) {
+    public void movementControl(Graphics2D canvas, BufferedImage collisionImage) {
         boolean collision = this.collision();
         this.checkButtonCollision();
         if (collision == false) {
             this.movement();
         }
         this.angle += this.rotation;
-        this.scope(canvas);
+        this.scope(canvas, collisionImage);
         this.playerIntoPortal();
     }
 
@@ -202,74 +202,29 @@ public class Player {
         }
     }
 
-    public void scope(Graphics2D canvas) {
+    public void scope(Graphics2D canvas, BufferedImage image) {
         //INTERACTIVE_CTX.fillStyle = "red";
-        /*for (int index = 3; index < 1000; index++) {
+        for (int index = 3; index < 1000; index++) {
+            int calculatedX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed * index;
+            int calculatedY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed * index;
             canvas.fillRect(
-                    this.x + (this.img.getWidth() / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-                    this.y + (this.img.getWidth()) / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index
-            ,
+                    calculatedX,
+                    calculatedY,
                     1,
-                    1)
-            var dataParedes = COLLISION_CTX.getImageData(
-                    this.x + (this.img.getWidth()) / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-                    this.y + (this.img.getWidth() / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-                    1,
-                    1).data
+                    1);
 
-            if (checkPixel(dataParedes, 255, 0, 0) || checkPixel(dataParedes, 0, 0, 255)) {
-                boolean blue;
-                if (checkPixel(dataParedes, 255, 0, 0)) {
+            if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0) || functions.checkPixel(image, calculatedX, calculatedY, 0, 0, 255, 0)) {
+                boolean blue = true;
+                if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0)) {
                     blue = false;
-                } else {
-                    blue = true;
                 }
-                this.lastPositionPortal = {
-                    "x": this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-                    "y": this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-                    "blue": blue
-                }
+                this.lastPositionPortal = new PortalPosition(calculatedX, calculatedY, blue);
                 break;
-                //index = 1000;
             }
 
-        }*/
+        }
     }
 
-//    this.scope  = function()
-//
-//    {
-//        INTERACTIVE_CTX.fillStyle = "red";
-//        for (let index = 3; index < 1000; index++) {
-//            INTERACTIVE_CTX.fillRect(
-//                    this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    1,
-//                    1)
-//            var dataParedes = COLLISION_CTX.getImageData(
-//                    this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    1,
-//                    1).data
-//
-//            if (checkPixel(dataParedes, 255, 0, 0) || checkPixel(dataParedes, 0, 0, 255)) {
-//                var blue;
-//                if (checkPixel(dataParedes, 255, 0, 0)) {
-//                    blue = false;
-//                } else {
-//                    blue = true;
-//                }
-//                this.lastPositionPortal = {
-//                    "x": this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * index,
-//                    "y": this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * index,
-//                    "blue": blue
-//                }
-//                break;
-//                //index = 1000;
-//            }
-//
-//        }
-//    }
     public void shootPortal(int number) {
         //0 y 1
         boolean nearOfPortal = this.portalNearOfPortal(number);

@@ -154,7 +154,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
             //INTERACTIVE_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             MAP_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             drawBackgrounds();
-            player.movementControl(MAP_CTX);
+            player.movementControl(MAP_CTX, imgMap);
             door.draw(MAP_CTX, COLLISION_CTX);
             switchButton.draw(MAP_CTX);
             player.draw(MAP_CTX);
