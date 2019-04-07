@@ -5,6 +5,7 @@
  */
 package PortalJava;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -122,15 +123,14 @@ $(document).ready(function() {
     });
 });
      */
-    //TODO: test if work
     public boolean checkPixel(BufferedImage mapData, int xPixel, int yPixel, int pixelOne, int pixelTwo, int pixelThree, int pixelAlpha
     ) {
         boolean isSelected = false;
-        int pixel = mapData.getRGB(xPixel, yPixel);
-        int alpha = (pixel >> 24) & 0xff;
-        int red = (pixel >> 16) & 0xff;
-        int green = (pixel >> 8) & 0xff;
-        int blue = (pixel) & 0xff;
+        Color pixel = new Color(mapData.getRGB(xPixel, yPixel));
+        int alpha = pixel.getAlpha();
+        int red = pixel.getRed();
+        int green = pixel.getGreen();
+        int blue = pixel.getBlue();
         if (red == pixelOne && green == pixelTwo && blue == pixelThree && alpha == pixelAlpha) {
             isSelected = true;
         }
@@ -138,21 +138,6 @@ $(document).ready(function() {
         return isSelected;
     }
 
-    //!Important: Don´t delete this
-    /*   int w = mapData.getWidth();
-        int h = mapData.getHeight();
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                int pixel = mapData.getRGB(xpixel, yPixel);
-                int alpha = (pixel >> 24) & 0xff;
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = (pixel) & 0xff;
-                if (red == pixelOne && green == pixelTwo && blue == pixelThree && alpha == pixelAlpha) {
-                    isSelected = true;
-                }
-            }
-        }*/
     public boolean squareCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
         return x1 < x2 + w2
                 && x1 + w1 > x2
@@ -171,7 +156,7 @@ $(document).ready(function() {
         context.drawImage(op.filter(img, null), x, y, null);
     }
 
-    public static BufferedImage getImage(String imageName) {
+    public BufferedImage getImage(String imageName) {
         BufferedImage image = null;
         try {
             URL resource = PortalJava.class.getResource("/PortalJava/images/" + imageName);

@@ -62,7 +62,7 @@ public class Player {
     }
 
     public void movementControl(Graphics2D canvas, BufferedImage collisionImage) {
-        boolean collision = this.collision();
+        boolean collision = this.collision(collisionImage);
         this.checkButtonCollision();
         if (collision == false) {
             this.movement();
@@ -136,56 +136,22 @@ public class Player {
         }
     }
 
-    public boolean collision() {
-        //        var colisionDatos = COLLISION_CTX.getImageData(
-//                this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * 4,
-//                this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * 4,
-//                1,
-//                1).data;
-//
-//        var colisionCentralDatos = COLLISION_CTX.getImageData(
-//                this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed,
-//                this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed,
-//                1,
-//                1).data;
-//
-//        if (checkPixel(colisionDatos, 255, 0, 0) || checkPixel(colisionDatos, 0, 0, 255)) {
-//            console.log("colision");
-//            return true;
-//        } else if (checkPixel(colisionCentralDatos, 0, 0, 0)) {
-//            this.die();
-//        } else {
-//            return false;
-//        }
+    public boolean collision(BufferedImage image) {
+        int dataCollisionX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed * 4;
+        int dataCollisionY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed * 4;
+        int dataCentralCollisionX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed;
+        int dataCentralCollisionY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed;
+
+        if (functions.checkPixel(image, dataCollisionX, dataCollisionY, 255, 0, 0, 255) || functions.checkPixel(image, dataCollisionX, dataCollisionY, 0, 0, 255, 255)) {
+            return true;
+        } else if (functions.checkPixel(image, dataCentralCollisionX, dataCentralCollisionY, 0, 0, 0, 255)) {
+            this.die();
+        } else {
+            return false;
+        }
         return false;
     }
 
-//    this.collision  = function()
-//
-//    {
-//
-//        var colisionDatos = COLLISION_CTX.getImageData(
-//                this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed * 4,
-//                this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed * 4,
-//                1,
-//                1).data;
-//
-//        var colisionCentralDatos = COLLISION_CTX.getImageData(
-//                this.x + (this.img.width / 4) + Math.cos(this.angle - Math.PI / 2) * this.speed,
-//                this.y + (this.img.width / 4) + Math.sin(this.angle - Math.PI / 2) * this.speed,
-//                1,
-//                1).data;
-//
-//        if (checkPixel(colisionDatos, 255, 0, 0) || checkPixel(colisionDatos, 0, 0, 255)) {
-//            console.log("colision");
-//            return true;
-//        } else if (checkPixel(colisionCentralDatos, 0, 0, 0)) {
-//            this.die();
-//        } else {
-//            return false;
-//        }
-//    }
-    //TODO
     public void die() {
         System.out.println("mueres");
     }
@@ -203,25 +169,20 @@ public class Player {
     }
 
     public void scope(Graphics2D canvas, BufferedImage image) {
-        //INTERACTIVE_CTX.fillStyle = "red";
-        for (int index = 3; index < 1000; index++) {
-            int calculatedX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed * index;
-            int calculatedY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed * index;
-            canvas.fillRect(
-                    calculatedX,
-                    calculatedY,
-                    1,
-                    1);
+        int calculatedX = this.x + (this.img.getWidth() / 4) + (int) Math.cos(this.angle - Math.PI / 2) * this.speed;
+        int calculatedY = this.y + (this.img.getWidth() / 4) + (int) Math.sin(this.angle - Math.PI / 2) * this.speed;
+        canvas.fillRect(
+                calculatedX,
+                calculatedY,
+                1,
+                1);
 
-            if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0) || functions.checkPixel(image, calculatedX, calculatedY, 0, 0, 255, 0)) {
-                boolean blue = true;
-                if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0)) {
-                    blue = false;
-                }
-                this.lastPositionPortal = new PortalPosition(calculatedX, calculatedY, blue);
-                break;
+        if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 255) || functions.checkPixel(image, calculatedX, calculatedY, 0, 0, 255, 255)) {
+            boolean blue = true;
+            if (functions.checkPixel(image, calculatedX, calculatedY, 255, 0, 0, 0)) {
+                blue = false;
             }
-
+            this.lastPositionPortal = new PortalPosition(calculatedX, calculatedY, blue);
         }
     }
 

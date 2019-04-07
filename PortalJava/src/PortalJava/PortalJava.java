@@ -57,7 +57,6 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
 
     public PortalJava() {
         functions = new Functions();
-        System.out.println("Hola");
         loadImages();
         door = new Door(704, 257, closeDoorImageV, openDoorImageV);
         switchButton = new Switch(170, 450, switchOffImage, switchOnImage, door);
@@ -154,7 +153,7 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
             //INTERACTIVE_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             MAP_CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             drawBackgrounds();
-            player.movementControl(MAP_CTX, imgMap);
+            player.movementControl(MAP_CTX, imgMapCollisions);
             door.draw(MAP_CTX, COLLISION_CTX);
             switchButton.draw(MAP_CTX);
             player.draw(MAP_CTX);

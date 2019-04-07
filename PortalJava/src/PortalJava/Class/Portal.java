@@ -41,8 +41,6 @@ public class Portal {
     }
 
     public void draw(Graphics2D canvas) {
-        //canvas.drawImage(this.img, this.x, this.y, null);
         canvas.drawImage(this.img, this.x - (this.width / 2), this.y - (this.height / 2), null);
-        //  INTERACTIVE_CTX.drawImage(this.img, this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
     }
 }
