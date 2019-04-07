@@ -5,11 +5,9 @@
  */
 package PortalJava.Class;
 
+import PortalJava.Functions;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -22,9 +20,10 @@ public class Portal {
     public int x;
     public int y;
     public int direction;
-    public float width;
-    public float height;
+    public int width;
+    public int height;
     private BufferedImage img;
+    private Functions functions;
 
     public Portal(int x, int y, int type) {
         this.active = true;
@@ -33,21 +32,17 @@ public class Portal {
         this.type = type;
         this.width = 20;
         this.height = 40;
-        try {
-            if (type == 0) {
-                this.img = ImageIO.read(new File("C://imagenes//bluePortal.png"));
-            } else {
-                this.img = ImageIO.read(new File("C://imagenes//yellowPortal.png"));
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+        this.functions = new Functions();
+        if (type == 0) {
+            this.img = functions.getImage("bluePortal.png");
+        } else {
+            this.img = functions.getImage("yellowPortal.png");
+        } // TODO Auto-generated catch block
     }
 
     public void draw(Graphics2D canvas) {
-        canvas.drawImage(this.img, this.x, this.y, null);
+        //canvas.drawImage(this.img, this.x, this.y, null);
+        canvas.drawImage(this.img, this.x - (this.width / 2), this.y - (this.height / 2), null);
         //  INTERACTIVE_CTX.drawImage(this.img, this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
     }
 }

@@ -10,11 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -53,11 +50,13 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     BufferStrategy gameBufferStrategy;
     BufferStrategy collisionBufferStrategy;
     BufferStrategy interactiveBufferStrategy;
+    Functions functions;
 
     int posx = 600;
     int posy = 400;
 
     public PortalJava() {
+        functions = new Functions();
         System.out.println("Hola");
         loadImages();
         door = new Door(704, 257, closeDoorImageV, openDoorImageV);
@@ -135,23 +134,12 @@ public class PortalJava extends JPanel implements KeyListener, Runnable {
     }
 
     private void loadImages() {
-        closeDoorImageV = getImage("closedDoorV.png");
-        openDoorImageV = getImage("openDoorV.png");
-        switchOffImage = getImage("deactivatedButton.png");
-        switchOnImage = getImage("activeButton.png");
-        imgMap = getImage("map_1.png");
-        imgMapCollisions = getImage("map_color_1.png");
-    }
-
-    private BufferedImage getImage(String imageName) {
-        BufferedImage image = null;
-        try {
-            URL resource = PortalJava.class.getResource("/PortalJava/images/" + imageName);
-            image = ImageIO.read(resource);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
+        closeDoorImageV = functions.getImage("closedDoorV.png");
+        openDoorImageV = functions.getImage("openDoorV.png");
+        switchOffImage = functions.getImage("deactivatedButton.png");
+        switchOnImage = functions.getImage("activeButton.png");
+        imgMap = functions.getImage("map_1.png");
+        imgMapCollisions = functions.getImage("map_color_1.png");
     }
 
     public static void main(String[] args) {

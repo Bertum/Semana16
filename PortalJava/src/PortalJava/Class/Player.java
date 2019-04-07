@@ -46,8 +46,8 @@ public class Player {
         this.portal1 = null;
         this.button = button;
         this.functions = new Functions();
+        this.lastPositionPortal = new PortalPosition(0, 0, true);
         try {
-            //TODO: relative path
             URL resource = Player.class.getResource("/PortalJava/images/players/player1.png");
             this.img = ImageIO.read(resource);
 
@@ -127,9 +127,13 @@ public class Player {
             this.rotation = (float) 0.05;
         }
         //Q
-        //if(e.getKeyCode() == 81)    this.shootPortal(0);
+        if (e.getKeyCode() == 81) {
+            this.shootPortal(0);
+        }
         //E
-        //if(e.getKeyCode() == 69)    this.shootPortal(1);
+        if (e.getKeyCode() == 69) {
+            this.shootPortal(1);
+        }
     }
 
     public boolean collision() {

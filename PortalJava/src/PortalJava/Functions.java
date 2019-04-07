@@ -9,6 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -166,5 +169,16 @@ $(document).ready(function() {
 
         // Drawing the rotated image at the required drawing locations
         context.drawImage(op.filter(img, null), x, y, null);
+    }
+
+    public static BufferedImage getImage(String imageName) {
+        BufferedImage image = null;
+        try {
+            URL resource = PortalJava.class.getResource("/PortalJava/images/" + imageName);
+            image = ImageIO.read(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 }
